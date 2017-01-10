@@ -18,5 +18,6 @@
 #include <string.h>
 
 #include "Helpers.h"
+#include "Printer.h"
 
 #define DllExport   __declspec( dllexport )
