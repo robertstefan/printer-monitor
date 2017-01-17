@@ -2,6 +2,7 @@
 #include "Printer.h"
 #include "Helpers.h"
 
+using namespace System::Collections::Generic;
 
 Printer::Printer()
 {
@@ -29,12 +30,12 @@ int Printer::listSystemMountedPrinters()
 	}
 	else
 	{
-		printersCollection = gcnew array<String^>(returned);
+		printersCollection = gcnew List<String^>(returned);
 
 		for (int i = 0; i < (int)returned; i++)
 		{
 			Console::WriteLine(String::Format("{0}. {1}", i + 1, gcnew String(prninfo[i].pPrinterName)));
-			printersCollection[i] = gcnew String(prninfo[i].pPrinterName);
+			printersCollection->Add(gcnew String(prninfo[i].pPrinterName));
 		}
 	}
 	GlobalFree(prninfo);
@@ -42,7 +43,8 @@ int Printer::listSystemMountedPrinters()
 	return 0;
 }
 
-void Printer::usePrinter(String^ printerName) {
+void Printer::usePrinter(String ^printerName) {
+	//Helpers::MarshalString(printerName, &printerToUse);
 	printerToUse = printerName;
 }
 
@@ -50,21 +52,22 @@ void Printer::usePrinter(int printerId) {
 	printerToUse = printersCollection[printerId];
 }
 
-int Printer::PrintDocument(String^ documentContent) {
+int Printer::PrintDocument(String ^documentContent) {
 	HANDLE hndl;
 	DEVMODE* devmode;
 
-	wchar_t szPrinter[MAX_PATH] = Helpers::StringToWchar(printerToUse);
+	std::string _printer = std::string();
+	Helpers::MarshalString(printerToUse, _printer);
 
-	DWORD chPrinter(ARRAYSIZE(szPrinter));
+	HDC printerDC = CreateDC(L"WINSPOOL", Helpers::MarshalWString(_printer), NULL, devmode);
+	
+	LPWSTR szPrinter = Helpers::SwitchToLongString(Helpers::MarshalWString(_printer));
 	OpenPrinter(szPrinter, &hndl, NULL);
 
 	int size = DocumentProperties(NULL, hndl, szPrinter, NULL, NULL, 0);
 
 	devmode = (DEVMODE*)malloc(size);
 	DocumentProperties(NULL, hndl, szPrinter, devmode, NULL, DM_OUT_BUFFER);
-
-	HDC printerDC = CreateDC(L"WINSPOOL", szPrinter, NULL, devmode);
 
 	DOCINFO info;
 
@@ -73,9 +76,27 @@ int Printer::PrintDocument(String^ documentContent) {
 
 	StartDoc(printerDC, &info);
 	StartPage(printerDC);
-	Rectangle(printerDC, 100, 100, 200, 200);
+
+	//Rectangle(printerDC, 100, 100, 200, 200);
+	
+	// Draw text A requires a rectangle area to draw the text so we set it up
+	RECT lRect = { 0 };
+	lRect.left = 0;
+	lRect.right = 300;
+	lRect.top = 0;
+	lRect.bottom = 300;
+	
+	
+	std::string _documentContent = std::string();
+	Helpers::MarshalString(documentContent, _documentContent);
+
+
+	// Draws the text on to the device context of the print job
+	DrawTextA(printerDC, _documentContent.c_str(), strlen(_documentContent.c_str()), &lRect, DT_LEFT);
+	
 	EndPage(printerDC);
 	EndDoc(printerDC);
+
 	DeleteDC(printerDC);
 	ClosePrinter(hndl);
 

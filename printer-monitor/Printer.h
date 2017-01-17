@@ -1,17 +1,30 @@
 #pragma once
-ref class Printer
+#include "stdafx.h"
+#include "Printer.h"
+#include "Helpers.h"
+
+#include <Windows.h>
+#include <wingdi.h>
+#include <winspool.h>
+#pragma comment(lib, "winspool.lib")
+
+using namespace System::Collections::Generic;
+
+DllExport public ref class Printer
 {
 private:
-	array<String^> ^printersCollection;
-	String^ printerToUse;
+	List<String^> ^ printersCollection;
+	String ^ printerToUse;
+
 public:
 	int getPrintersCount() {
-		return printersCollection->Length;
+		return printersCollection->Capacity;
 	}
+
 	int listSystemMountedPrinters();
-	void usePrinter(String^ printerName);
+	void usePrinter(String ^printerName);
 	void usePrinter(int printerId);
-	int PrintDocument(String^ documentContent);
+	int PrintDocument(String ^documentContent);
 	Printer();
 };
 

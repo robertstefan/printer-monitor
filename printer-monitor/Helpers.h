@@ -1,11 +1,25 @@
 #pragma once
-#include "Helpers.h"
+#include <iostream>  
+#include <stdlib.h>  
+#include <string>  
 
+#include "atlbase.h"  
+#include "atlstr.h"  
+#include "comutil.h"  
+#include "vcclr.h"  
+
+using namespace std;
 using namespace System;
+using namespace System::Runtime::InteropServices;
 
-static public ref class Helpers
+
+DllExport static public ref class Helpers
 {
 public:
 	static wchar_t* StringToWchar(String ^str);
+	static void MarshalString(String ^ s, string& os);
+	static void MarshalString(String ^ s, wstring& os);
+	static LPCWSTR MarshalWString(std::string s);
+	static LPWSTR SwitchToLongString(LPCWSTR str);
 };
 

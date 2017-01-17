@@ -7,17 +7,6 @@
 
 // TODO: reference additional headers your program requires here
 
-#include <Windows.h>
-#include <string.h>
-#include <wingdi.h>
-#include <winspool.h>
-#pragma comment(lib, "winspool.lib")
 
-
-#include <msclr\marshal.h>
-#include <string.h>
-
-#include "Helpers.h"
-#include "Printer.h"
 
 #define DllExport   __declspec( dllexport )
