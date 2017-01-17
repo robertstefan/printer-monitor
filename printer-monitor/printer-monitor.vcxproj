@@ -138,6 +138,7 @@
   <ItemGroup>
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="Printer.h" />
+    <ClInclude Include="PrinterDocument.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
@@ -149,6 +150,7 @@
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="printer-monitor.cpp" />
     <ClCompile Include="Printer.cpp" />
+    <ClCompile Include="PrinterDocument.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

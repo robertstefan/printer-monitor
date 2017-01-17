@@ -6,8 +6,8 @@ using namespace System::Collections::Generic;
 
 Printer::Printer()
 {
+	printerDocument = gcnew PrinterDocument();
 }
-
 
 int Printer::listSystemMountedPrinters()
 {
@@ -77,8 +77,6 @@ int Printer::PrintDocument(String ^documentContent) {
 	StartDoc(printerDC, &info);
 	StartPage(printerDC);
 
-	//Rectangle(printerDC, 100, 100, 200, 200);
-	
 	// Draw text A requires a rectangle area to draw the text so we set it up
 	RECT lRect = { 0 };
 	lRect.left = 0;

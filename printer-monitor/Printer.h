@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Printer.h"
 #include "Helpers.h"
+#include "PrinterDocument.h"
 
 #include <Windows.h>
 #include <wingdi.h>
@@ -15,6 +16,7 @@ DllExport public ref class Printer
 private:
 	List<String^> ^ printersCollection;
 	String ^ printerToUse;
+	PrinterDocument^ printerDocument;
 
 public:
 	int getPrintersCount() {
