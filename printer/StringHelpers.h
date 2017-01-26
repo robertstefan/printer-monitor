@@ -1,20 +1,19 @@
 #pragma once
-#include <iostream>  
-#include <stdlib.h>  
-#include <string>  
+#include <iostream>
+#include <stdlib.h>
+#include <string>
 
-#include "atlbase.h"  
-#include "atlstr.h"  
-#include "comutil.h"  
-#include "vcclr.h"  
+#include "atlbase.h"
+#include "atlstr.h"
+#include "comutil.h"
+#include "vcclr.h"
 
 using namespace std;
 using namespace System;
 using namespace System::Runtime::InteropServices;
 
-extern "C" {
-
-	public ref class Helpers
+namespace printer {
+	public ref class StringHelpers
 	{
 	public:
 		static wchar_t* StringToWchar(String ^str);

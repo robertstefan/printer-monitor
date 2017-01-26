@@ -6,7 +6,3 @@
 #pragma once
 
 // TODO: reference additional headers your program requires here
-#include "json.hpp"
-
-
-#define DllExport   __declspec( dllexport )

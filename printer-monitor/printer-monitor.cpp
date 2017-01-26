@@ -4,8 +4,9 @@
 #include "Printer.h"
 
 using namespace System;
+using json = nlohmann::json;
 
-int main(String^ printerName)
+int __clrcall _tmain(String^ printerName, json documentFormat)
 {
 	Printer^ monitor = gcnew Printer();
 	
@@ -37,7 +38,8 @@ int main(String^ printerName)
 	}
 
 	//monitor->usePrinter();
-	monitor->PrintDocument(L"Hello world!");
+	//monitor->PrintDocument(L"Hello world!");
+	monitor->printerDocument->Bind();
 
 	Console::ReadLine();
 	return 0;

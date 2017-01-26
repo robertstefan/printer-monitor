@@ -4,11 +4,6 @@
 
 using namespace System::Collections::Generic;
 
-Printer::Printer()
-{
-	printerDocument = gcnew PrinterDocument();
-}
-
 int Printer::listSystemMountedPrinters()
 {
 	PRINTER_INFO_2* prninfo = NULL;
@@ -52,7 +47,7 @@ void Printer::usePrinter(int printerId) {
 	printerToUse = printersCollection[printerId];
 }
 
-int Printer::PrintDocument(String ^documentContent) {
+/*int Printer::PrintDocument(String ^documentContent) {
 	HANDLE hndl;
 	DEVMODE* devmode;
 
@@ -99,4 +94,4 @@ int Printer::PrintDocument(String ^documentContent) {
 	ClosePrinter(hndl);
 
 	return 0;
-}
+}*/

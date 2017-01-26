@@ -11,22 +11,30 @@
 
 using namespace System::Collections::Generic;
 
-DllExport public ref class Printer
-{
-private:
-	List<String^> ^ printersCollection;
-	String ^ printerToUse;
-	PrinterDocument^ printerDocument;
+extern "C" {
 
-public:
-	int getPrintersCount() {
-		return printersCollection->Capacity;
-	}
+	public ref class Printer
+	{
+	private:
+		List<String^> ^ printersCollection;
+		String ^ printerToUse;
 
-	int listSystemMountedPrinters();
-	void usePrinter(String ^printerName);
-	void usePrinter(int printerId);
-	int PrintDocument(String ^documentContent);
-	Printer();
-};
 
+	public:
+		int getPrintersCount() {
+			return printersCollection->Capacity;
+		}
+
+		PrinterDocument^ printerDocument;
+
+		int listSystemMountedPrinters();
+		void usePrinter(String ^printerName);
+		void usePrinter(int printerId);
+		//int PrintDocument(String ^documentContent);
+
+		Printer() {
+			printerDocument = gcnew PrinterDocument();
+		}
+	};
+
+}

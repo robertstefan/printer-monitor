@@ -3,12 +3,9 @@
 #include "PrinterDocument.h"
 
 using namespace System;
+using json = nlohmann::json;
 
-PrinterDocument::PrinterDocument()
-{
-}
-
-void PrinterDocument::Bind(HANDLE hndl) {
+void PrinterDocument::Bind() {
 
 }
 
