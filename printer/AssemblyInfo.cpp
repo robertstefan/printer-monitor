@@ -11,14 +11,14 @@ using namespace System::Security::Permissions;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly:AssemblyTitleAttribute(L"printer")];
-[assembly:AssemblyDescriptionAttribute(L"")];
-[assembly:AssemblyConfigurationAttribute(L"")];
-[assembly:AssemblyCompanyAttribute(L"")];
-[assembly:AssemblyProductAttribute(L"printer")];
-[assembly:AssemblyCopyrightAttribute(L"Copyright (c)  2017")];
-[assembly:AssemblyTrademarkAttribute(L"")];
-[assembly:AssemblyCultureAttribute(L"")];
+[assembly:AssemblyTitleAttribute("printer")];
+[assembly:AssemblyDescriptionAttribute("")];
+[assembly:AssemblyConfigurationAttribute("")];
+[assembly:AssemblyCompanyAttribute("")];
+[assembly:AssemblyProductAttribute("printer")];
+[assembly:AssemblyCopyrightAttribute("Copyright (c)  2017")];
+[assembly:AssemblyTrademarkAttribute("")];
+[assembly:AssemblyCultureAttribute("")];
 
 //
 // Version information for an assembly consists of the following four values:
@@ -36,3 +36,5 @@ using namespace System::Security::Permissions;
 [assembly:ComVisible(false)];
 
 [assembly:CLSCompliantAttribute(true)];
+
+[assembly:SecurityPermission(SecurityAction::RequestMinimum, UnmanagedCode = true)];

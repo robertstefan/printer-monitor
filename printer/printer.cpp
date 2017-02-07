@@ -1,10 +1,13 @@
+// This is the main DLL file.
+
 #include "stdafx.h"
 #include "printer.h"
-#include "StringHelpers.h"
 
 using namespace printer;
 using namespace System;
 using namespace System::Collections::Generic;
+
+#include "StringHelpers.h"
 
 void Printer::listSystemMountedPrinters() {
 	PRINTER_INFO_2* prninfo = NULL;
@@ -52,20 +55,35 @@ void Printer::generateMenu() {
 	int printerPosition;
 	printerPosition = Int32::Parse(Console::ReadLine()) - 1;
 
-	Console::WriteLine(String::Format("You have chosen printer `{0}`.", printersCollection[printerPosition]));
+	printerToUse = printersCollection[printerPosition];
 
-	
+	Console::WriteLine(String::Format("You have chosen printer `{0}`.", printerToUse));
+
+	//choosePrinter(printerToUse);
 }
 
 void Printer::choosePrinter(String^ printerName) {
 	HANDLE hndl;
 	DEVMODE* devmode;
 
+	if (String::IsNullOrEmpty(printerName)) {
+		printerName = printerToUse;
+	}
+
 	std::string _printer = std::string();
 	StringHelpers::MarshalString(printerName, _printer);
 
-	HDC printerDC = CreateDC(L"WINSPOOL", StringHelpers::MarshalWString(_printer), NULL, devmode);
+	LPCWSTR _printerName = StringHelpers::MarshalWString(_printer);
 
-	LPWSTR szPrinter = StringHelpers::SwitchToLongString(StringHelpers::MarshalWString(_printer));
+	LPWSTR szPrinter = StringHelpers::SwitchToLongString(_printerName);
 	OpenPrinter(szPrinter, &hndl, NULL);
+
+	int size = DocumentProperties(NULL, hndl, szPrinter, NULL, NULL, 0);
+	devmode = (DEVMODE*)malloc(size);
+
+	HDC printerDC = CreateDC(L"WINSPOOL", _printerName, NULL, devmode);
+	
+	if (hndl != NULL) {
+		Console::WriteLine("Got printer handler");
+	}
 }

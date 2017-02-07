@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "printer", "printer\printer.vcxproj", "{E3489806-75CE-4AE9-AFD0-32185EB7D996}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "runner", "runner\runner.vcxproj", "{86CE67D6-102E-43A0-BC7C-02475053D997}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E3489806-75CE-4AE9-AFD0-32185EB7D996}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E3489806-75CE-4AE9-AFD0-32185EB7D996}.Debug|Win32.Build.0 = Debug|Win32
+		{E3489806-75CE-4AE9-AFD0-32185EB7D996}.Release|Win32.ActiveCfg = Release|Win32
+		{E3489806-75CE-4AE9-AFD0-32185EB7D996}.Release|Win32.Build.0 = Release|Win32
+		{86CE67D6-102E-43A0-BC7C-02475053D997}.Debug|Win32.ActiveCfg = Debug|Win32
+		{86CE67D6-102E-43A0-BC7C-02475053D997}.Debug|Win32.Build.0 = Debug|Win32
+		{86CE67D6-102E-43A0-BC7C-02475053D997}.Release|Win32.ActiveCfg = Release|Win32
+		{86CE67D6-102E-43A0-BC7C-02475053D997}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

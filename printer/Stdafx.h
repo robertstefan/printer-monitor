@@ -3,7 +3,11 @@
 // but are changed infrequently
 
 #pragma once
+
+#include <string>
 #include <Windows.h>
 #include <WinGDI.h>
 #include <WinSpool.h>
-#pragma comment(lib, "WINSPOOLAPI.lib")
+#include <comdef.h>
+#pragma comment(lib, "winspool.lib")
+#pragma comment(lib, "Gdi32.lib")
