@@ -16,8 +16,8 @@ namespace printer {
 
 	public ref class StringHelpers
 	{
-	private:
-		std::wstring s2ws(const std::string& s)
+	public:
+		static std::wstring s2ws(const std::string& s)
 		{
 			int len;
 			int slength = (int)s.length() + 1;
@@ -25,13 +25,15 @@ namespace printer {
 			wchar_t* buf = new wchar_t[len];
 			MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, buf, len);
 			std::wstring r(buf);
-			delete[] buf;
+			//delete[] buf;
 			return r;
 		}
-	public:
 		static void MarshalString(String ^s, string& os);
 		static LPCWSTR MarshalWString(std::string s);
 		static LPWSTR SwitchToLongString(LPCWSTR str);
+		static std::wstring Wide(std::string str) {
+			return std::wstring(str.begin(), str.end());
+		};
 	};
 
 }

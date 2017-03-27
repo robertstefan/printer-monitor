@@ -14,10 +14,12 @@ void StringHelpers::MarshalString(String ^s, string& os) {
 }
 
 LPCWSTR StringHelpers::MarshalWString(std::string s) {
-	std::wstring stemp = sw2s(s);
-	LPCWSTR result = stemp.c_str();
+	std::wstring stemp = StringHelpers::s2ws(s);
+	//LPCWSTR result;
+	
+	return stemp.c_str();
 
-	return result;
+	//return result;
 }
 
 LPWSTR StringHelpers::SwitchToLongString(LPCWSTR str) {

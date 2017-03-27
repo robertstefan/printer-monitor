@@ -15,6 +15,8 @@ namespace printer {
 	private:
 		List<String^>^ printersCollection;
 		String^ printerToUse;
+		HANDLE printerHndl;
+		BOOL IsPrinterError(HANDLE hndl);
 
 	public:
 		Printer() {
@@ -25,6 +27,10 @@ namespace printer {
 
 		void generateMenu();
 
-		void choosePrinter(String^ printerName);
+		Printer^ choosePrinter(String^ printerName);
+
+		BOOL GetJobs(HANDLE hndl, JOB_INFO_2 **jobInfo, int *pcJobs, DWORD *printQueueStatus);
+
+		Printer^ createDocument(System::Guid documentTitle, System::String^ documentText);
 	};
 }

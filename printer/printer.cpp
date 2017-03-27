@@ -62,7 +62,7 @@ void Printer::generateMenu() {
 	//choosePrinter(printerToUse);
 }
 
-void Printer::choosePrinter(String^ printerName) {
+Printer^ Printer::choosePrinter(String^ printerName) {
 	HANDLE hndl;
 	DEVMODE* devmode;
 
@@ -73,17 +73,153 @@ void Printer::choosePrinter(String^ printerName) {
 	std::string _printer = std::string();
 	StringHelpers::MarshalString(printerName, _printer);
 
-	LPCWSTR _printerName = StringHelpers::MarshalWString(_printer);
+	HDC printerDC = CreateDC(L"WINSPOOL", StringHelpers::Wide(_printer).c_str(), NULL, devmode);
+	OpenPrinter(NULL, &hndl, NULL);
 
-	LPWSTR szPrinter = StringHelpers::SwitchToLongString(_printerName);
-	OpenPrinter(szPrinter, &hndl, NULL);
-
-	int size = DocumentProperties(NULL, hndl, szPrinter, NULL, NULL, 0);
-	devmode = (DEVMODE*)malloc(size);
-
-	HDC printerDC = CreateDC(L"WINSPOOL", _printerName, NULL, devmode);
-	
 	if (hndl != NULL) {
-		Console::WriteLine("Got printer handler");
+		Console::Write("Got printer handler\n\n");
+
+		Printer::printerHndl = hndl;
 	}
+	else {
+		Console::Write("Error.");
+	}
+
+	return this;
+}
+
+BOOL Printer::GetJobs(HANDLE hndl, JOB_INFO_2 **jobInfo, int *pcJobs, DWORD *printQueueStatus) {
+
+	DWORD cByteNeeded,
+		nReturned,
+		cByteUsed;
+
+	JOB_INFO_2 *pJobStorage = NULL;
+	PRINTER_INFO_2 *pPrinterInfo = NULL;
+
+	if (hndl == NULL)
+		hndl = Printer::printerHndl;
+
+	if (!GetPrinter(hndl, 2, NULL, 0, &cByteNeeded)) {
+		if (GetLastError() != ERROR_INSUFFICIENT_BUFFER)
+			return FALSE;
+		
+		pPrinterInfo = (PRINTER_INFO_2 *)malloc(cByteNeeded);
+		if (!pPrinterInfo)
+			return FALSE;
+
+		if (!GetPrinter(hndl, 2, (LPBYTE)pPrinterInfo, cByteNeeded, &cByteUsed)) {
+			free(pPrinterInfo);
+
+			pPrinterInfo = NULL;
+
+			return FALSE;
+		}
+
+		if (!EnumJobs(hndl, 0, pPrinterInfo->cJobs, 2, NULL, 0, (LPDWORD)&cByteNeeded, (LPDWORD)&nReturned)) {
+			if (GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
+				free(pPrinterInfo);
+				pPrinterInfo = NULL;
+
+				return FALSE;
+			}
+		}
+
+		pJobStorage = (JOB_INFO_2 *)malloc(cByteNeeded);
+		if (!pJobStorage) {
+			free(pPrinterInfo);
+
+			pPrinterInfo = NULL;
+
+			return FALSE;
+		}
+
+		ZeroMemory(pJobStorage, cByteNeeded);
+
+		if (!EnumJobs(hndl, 0, pPrinterInfo->cJobs, 2, (LPBYTE)pJobStorage, cByteNeeded, (LPDWORD)&cByteUsed, (LPDWORD)&nReturned)) {
+			free(pPrinterInfo);
+			free(pJobStorage);
+
+			pJobStorage = NULL;
+			pPrinterInfo = NULL;
+
+			return FALSE;
+		}
+
+		*pcJobs = nReturned;
+		*printQueueStatus = pPrinterInfo->Status;
+		*jobInfo = pJobStorage;
+
+		free(pPrinterInfo);
+
+		return TRUE;
+	}
+};
+
+BOOL Printer::IsPrinterError(HANDLE hndl) {
+	JOB_INFO_2 *pJobInfo;
+	int cJobs,
+		i;
+	DWORD dwPrinterStatus;
+
+	if (!GetJobs(hndl, &pJobInfo, &cJobs, &dwPrinterStatus))
+		return FALSE;
+
+	if (dwPrinterStatus & (
+		PRINTER_STATUS_ERROR |
+		PRINTER_STATUS_PAPER_JAM |
+		PRINTER_STATUS_PAPER_OUT |
+		PRINTER_STATUS_PAPER_PROBLEM |
+		PRINTER_STATUS_OUTPUT_BIN_FULL |
+		PRINTER_STATUS_NOT_AVAILABLE |
+		PRINTER_STATUS_NO_TONER |
+		PRINTER_STATUS_OUT_OF_MEMORY |
+		PRINTER_STATUS_OFFLINE |
+		PRINTER_STATUS_DOOR_OPEN)) {
+		free(pJobInfo);
+
+		return TRUE;
+	}
+
+	for (i = 0; i < cJobs; i++) {
+		if (pJobInfo[i].Status & JOB_STATUS_PRINTING) {
+			if (pJobInfo[i].Status & (
+				JOB_STATUS_ERROR |
+				JOB_STATUS_OFFLINE |
+				JOB_STATUS_PAPEROUT |
+				JOB_STATUS_BLOCKED_DEVQ))
+			{
+				free(pJobInfo);
+
+				return TRUE;
+			}
+		}
+	}
+
+	free(pJobInfo);
+
+	return FALSE;
+}
+
+Printer^ Printer::createDocument(System::Guid documentTitle, System::String^ documentText) {
+	DOC_INFO_1 doc;
+
+	char docName[] = "test document";
+	char dataType[] = "text";
+
+	doc.pDocName = (LPWSTR)docName;
+	doc.pOutputFile = NULL;
+	doc.pDatatype = (LPWSTR)dataType;
+
+	int temp;
+	temp = StartPagePrinter(Printer::printerHndl);
+
+	std::string _documentContent = std::string();
+	StringHelpers::MarshalString(documentText, _documentContent);
+
+	char content[] = _documentContent.c_str();
+
+	temp = WritePrinter(Printer::printerHndl, sizeof(content), _documentContent, );
+
+	return this;
 }
